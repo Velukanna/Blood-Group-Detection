@@ -1,0 +1,498 @@
+#: import FadeTransition kivy.uix.screenmanager.FadeTransition
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+BoxLayout:
+    Screen:
+        name:"screen_app"
+        id: app_screens
+        BoxLayout:
+            orientation: 'vertical'
+        #Comment MDToolbar section to remove toolbar and still maintain full fucntionality
+            MDToolbar:
+                id:toolbar
+                title: "Blood Group Detection"
+                elevation: 10
+                left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+        #End MDToolbar section
+            ScreenManager:
+                id: sm_sub
+                transition:NoTransition()
+                MainActivity:
+                    name:"main_activity"
+                Process1Activity:
+                    name:"process1_activity"
+                Process2Activity:
+                    name:"process2_activity"
+                Process3Activity:
+                    name:"process3_activity"
+                Process4Activity:
+                    name:"process4_activity"
+                Process5Activity:
+                    name:"process5_activity"
+                Process6Activity:
+                    name:"process6_activity"
+                Process7Activity:
+                    name:"process7_activity"
+        MDNavigationDrawer:
+            id: nav_drawer
+            BoxLayout:
+                orientation: 'vertical'
+                padding:"8dp"
+                spacing:"8dp"
+                MDLabel:
+                    text:"Menu"
+                    color:app.theme_cls.primary_color
+                    text_style:"Button"
+                    size_hint_y:None
+                    height:self.texture_size[1]
+                ScrollView:
+                    MDList:
+                        OneLineListItem:
+                            text:"Main Window"
+                            on_release:
+                                sm_sub.current='main_activity'
+                                root.ids.toolbar.title="Blood Group Detection"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"1 - Green Plane Extraction"
+                            on_release:
+                                sm_sub.current='process1_activity'
+                                root.ids.toolbar.title="Green Plane Extraction"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"2 - Auto Threshold"
+                            on_release:
+                                sm_sub.current='process2_activity'
+                                root.ids.toolbar.title="Auto Threshold"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"3 - Adaptive Threshold:Ni Black"
+                            on_release:
+                                sm_sub.current='process3_activity'
+                                root.ids.toolbar.title="Adaptive Threshold:Ni Black"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"4 - Morphology: Fill Holes"
+                            on_release:
+                                sm_sub.current='process4_activity'
+                                root.ids.toolbar.title="Morphology: Fill Holes"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"5 - Advanced Morphology: Remove small objects"
+                            on_release:
+                                sm_sub.current='process5_activity'
+                                root.ids.toolbar.title="Advanced Morphology: Remove small objects"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"6 - Histogram"
+                            on_release:
+                                sm_sub.current='process6_activity'
+                                root.ids.toolbar.title="Histogram"
+                                root.ids.nav_drawer.set_state("close")
+                        OneLineListItem:
+                            text:"7 - Quantification"
+                            on_release:
+                                sm_sub.current='process7_activity'
+                                root.ids.toolbar.title="Quantification"
+                                root.ids.nav_drawer.set_state("close")
+                MDLabel:
+                    text:"Options"
+                    color:app.theme_cls.primary_color
+                    text_style:"Button"
+                    size_hint_y:None
+                    height:self.texture_size[1]
+                MDList:
+                    DarkModeItem:
+                    OneLineIconListItem:
+                        text:"Exit"
+                        on_release:
+                            app.dialogBox()
+                        IconLeftWidget:
+                            icon:"exit-to-app"
+<MainActivity>:
+    ScrollView:
+        id:scroll_view
+        orientation:"vertical"
+        MDGridLayout:
+            id:grid_layout
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            BoxLayout:
+                id:layout_1
+                orientation:"vertical"
+                AnchorLayout:
+                    id:anchor_layout
+                    orientation:"vertical"
+                    anchor_y:"top"
+                    anchor_x:"center"
+                    SmartTileWithLabel:
+                        id:reagAnti_A
+                        size_hint:(.3,1)
+                        source:"preview.png"
+                        text:"[size=18][color=#ffffff]Reagent Anti-A[/color][/size]"
+                AnchorLayout:
+                    size_hint_y:None
+                    MDFillRoundFlatIconButton:
+                        icon:"file-image"
+                        text:"Choose Image"
+                        on_release:
+                            root.file_manager_open(1)
+            BoxLayout:
+                orientation:"vertical"
+                AnchorLayout:
+                    orientation:"vertical"
+                    anchor_x:"center"
+                    anchor_y:"top"
+                    SmartTileWithLabel:
+                        id:reagAnti_B
+                        size_hint:(.3,1)
+                        source:"preview.png"
+                        text:"[size=18][color=#ffffff]Reagent Anti-B[/color][/size]"
+                AnchorLayout:
+                    size_hint_y:None
+                    MDFillRoundFlatIconButton:
+                        icon:"file-image"
+                        text:"Choose Image"
+                        on_release:
+                            root.file_manager_open(2)
+            BoxLayout:
+                orientation:"vertical"
+                AnchorLayout:
+                    orientation:"vertical"
+                    anchor_y:"top"
+                    anchor_x:"center"
+                    SmartTileWithLabel:
+                        id:reagAnti_D
+                        size_hint:(.3,1)
+                        source:"preview.png"
+                        text:"[size=18][color=#ffffff]Reagent Anti-D[/color][/size]"
+                AnchorLayout:
+                    size_hint_y:None
+                    MDFillRoundFlatIconButton:
+                        icon:"file-image"
+                        text:"Choose Image"
+                        on_release:
+                            root.file_manager_open(3)
+            BoxLayout:
+                orientation:"vertical"
+                AnchorLayout:
+                    orientation:"vertical"
+                    anchor_x:"center"
+                    anchor_y:"top"
+                    SmartTileWithLabel:
+                        id:ctrl
+                        size_hint:(.3,1)
+                        source:"preview.png"
+                        text:"[size=18][color=#ffffff]Control Reagent[/color][/size]"
+                AnchorLayout:
+                    size_hint_y:None
+                    MDFillRoundFlatIconButton:
+                        icon:"file-image"
+                        text:"Choose Image"
+                        on_release:
+                            root.file_manager_open(4)
+    AnchorLayout:
+        orientation:"horizontal"
+        anchor_x:"right"
+        anchor_y:"bottom"
+        padding:15
+        MDFillRoundFlatIconButton:
+            id:processBtn
+            text:"Process"
+            disabled:True
+            icon:"progress-clock"
+            on_release:
+                root.start1()
+<Process1Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p1Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p1Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p1Anti_D
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p1Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Color Reagent[/color][/size]"
+<Process2Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p2Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p2Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p2Anti_D
+                    size_hint:(.4,1)
+                    width:"250dp"
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p2Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Control Reagent[/color][/size]"
+<Process3Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p3Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p3Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p3Anti_D
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p3Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Control Reagent[/color][/size]"
+<Process4Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p4Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p4Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p4Anti_D
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p4Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Control Reagent[/color][/size]"
+
+<Process5Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p5Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p5Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p5Anti_D
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p5Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Control Reagent[/color][/size]"
+<Process6Activity>:
+    ScrollView:
+        orientation:"vertical"
+        id:histogram
+<Process7Activity>:
+    ScrollView:
+        orientation:"vertical"
+        MDGridLayout:
+            cols: 1 if int((root.width)//600)<0 else 1 if int((root.width)//600)<2 else 2
+            spacing:int((root.height)//10)
+            padding:10,int((root.height)//10),10,10
+            row_default_height:int((root.height+root.width)//5) if int((root.height+root.width)//5)<300 else 350
+            row_force_default:True
+            size_hint_y:None
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p7Anti_A
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-A[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p7Anti_B
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-B[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_y:"top"
+                anchor_x:"center"
+                SmartTileWithLabel:
+                    id:p7Anti_D
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Anti-D[/color][/size]"
+            AnchorLayout:
+                orientation:"vertical"
+                anchor_x:"center"
+                anchor_y:"top"
+                SmartTileWithLabel:
+                    id:p7Control
+                    size_hint:(.4,1)
+                    source:"preview.png"
+                    text:"[size=18][color=#ffffff]Processed Control Reagent[/color][/size]"
+<DarkModeItem>:
+    text:"Dark Mode"
+    IconLeftWidget:
+        icon:"theme-light-dark"
+    DarkModeItemContent:
+        active:True if app.switchCheck() else False
+        on_press:
+            self.changeTheme(self,self.active)
